@@ -1,1 +1,1 @@
-##Starting challange 1
+#Challange 1 complete: Theme Configured
