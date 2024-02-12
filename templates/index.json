@@ -40,6 +40,9 @@
         ".button--primary {background-color: #964b00; color: white;}"
       ],
       "settings": {
+        "desktop_video": "shopify:\/\/files\/videos\/Desktop video.mp4",
+        "mobile_video": "shopify:\/\/files\/videos\/Mobile video.mp4",
+        "show_video": false,
         "image": "shopify:\/\/shop_images\/banner_image_main.jpg",
         "image_overlay_opacity": 40,
         "image_height": "large",

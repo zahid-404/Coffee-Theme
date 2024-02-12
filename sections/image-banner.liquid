@@ -27,12 +27,31 @@
   #Banner-{{ section.id }}::after {
     opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
   }
+  .mobile_video {
+  display: block;
+}
+
+.desktop_video {
+    display: none !important;
+  }
+
+
+@media only screen and (min-width: 768px) {
+  .desktop_video {
+    display: block !important;
+  }
+
+  .mobile_video {
+    display: none;
+  }
+}
 {%- endstyle -%}
 
 <div
   id="Banner-{{ section.id }}"
   class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}"
 >
+  {% unless section.settings.show_video %}
   {%- if section.settings.image != blank -%}
     <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}">
       {%- liquid
@@ -93,6 +112,14 @@
       }}
     </div>
   {%- endif -%}
+  {% else %}
+  <div class="banner__media media desktop_video">
+    {{ section.settings.desktop_video | video_tag: autoplay:true, loop:true, muted:true, controls:false }}
+  </div>
+  <div class="banner__media media mobile_video">
+    {{ section.settings.mobile_video | video_tag: autoplay:true, loop:true, muted:true, controls:false }}
+  </div>
+  {% endunless %}
   <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width">
     <div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
       {%- for block in section.blocks -%}
@@ -150,6 +177,22 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "video",
+      "id": "desktop_video",
+      "label": "Desktop Video"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video",
+      "label": "Show Video",
+      "default": false
+    },    
     {
       "type": "image_picker",
       "id": "image",
