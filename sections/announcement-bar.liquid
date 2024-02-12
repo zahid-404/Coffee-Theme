@@ -19,8 +19,37 @@
           {%- endif -%}
         {%- endif -%}
       </div>
+    {%- when 'countdown' -%}
+      <div class="announcement-bar color-{{ block.settings.color_scheme }} gradient" role="region" aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+        <div class="page-width">
+          <div id="countdown-timer" class="announcement-countdown"></div>
+          <p id="custom-text">{{ block.settings.custom_text }}</p> <!-- Display custom text -->
+        </div>
+      </div>
+      <script>
+        var countdownDate = new Date("{{ block.settings.countdown_date }}").getTime();
+        var countdownText = "{{ block.settings.countdown_text }}";
+        var customText = "{{ block.settings.custom_text }}"; // Retrieve custom text
+        var x = setInterval(function() {
+          var now = new Date().getTime();
+          var distance = countdownDate - now;
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          document.getElementById("countdown-timer").innerHTML = countdownText + days + "d " + hours + "h "
+          + minutes + "m " + seconds + "s ";
+          document.getElementById("custom-text").innerHTML = customText; // Update custom text
+          if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown-timer").innerHTML = "EXPIRED";
+          }
+        }, 1000);
+      </script>
   {%- endcase -%}
 {%- endfor -%}
+
+
 
 {% schema %}
 {
@@ -92,12 +121,65 @@
           "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
         }
       ]
+    },
+    {
+      "type": "countdown",
+      "name": "Countdown Timer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "custom_text",
+          "label": "Custom Text",
+          "default": "Custom Text Here",
+          "info": "Enter custom text to display along with the countdown timer."
+        },
+        {
+          "type": "text",
+          "id": "countdown_date",
+          "label": "Countdown Date",
+          "default": "2024-12-31",
+          "info": "Enter the date and time for the countdown in YYYY-MM-DD format, for example, 2024-12-31."
+        },
+      
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "Accent 1"
+            },
+            {
+              "value": "accent-2",
+              "label": "Accent 2"
+            },
+            {
+              "value": "background-1",
+              "label": "Background 1"
+            },
+            {
+              "value": "background-2",
+              "label": "Background 2"
+            },
+            {
+              "value": "inverse",
+              "label": "Inverse"
+            }
+          ],
+          "default": "accent-1",
+          "label": "Color Scheme",
+          "info": "Choose the color scheme for the countdown timer."
+        }
+      ]
     }
   ],
   "default": {
     "blocks": [
       {
         "type": "announcement"
+      },
+      {
+        "type": "countdown"
       }
     ]
   }

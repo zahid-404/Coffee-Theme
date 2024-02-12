@@ -13,10 +13,21 @@
             "color_scheme": "accent-2",
             "link": ""
           }
+        },
+        "countdown_q7hthd": {
+          "type": "countdown",
+          "settings": {
+            "text_1": "Welcome to Coffee store",
+            "text_alignment": "center",
+            "color_scheme": "accent-1",
+            "link": "",
+            "countdown_text": ""
+          }
         }
       },
       "block_order": [
-        "announcement-bar-0"
+        "announcement-bar-0",
+        "countdown_q7hthd"
       ],
       "settings": {
       }
