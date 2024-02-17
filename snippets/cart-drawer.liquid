@@ -4,9 +4,11 @@
   Usage:
   {% render 'cart-drawer' %}
 {% endcomment %}
-
+{% assign cart_product = settings.cart_drawer_product %}
+  {% comment %} <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script> {% endcomment %}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
-
+{% assign showAddtoCart = true %}
 <style>
   .drawer {
     visibility: hidden;
@@ -23,6 +25,8 @@
       aria-label="{{ 'sections.cart.title' | t }}"
       tabindex="-1"
     >
+
+    
       {%- if cart == empty -%}
         <div class="drawer__inner-empty">
           <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
@@ -50,7 +54,7 @@
           </div>
           {%- if settings.cart_drawer_collection != blank -%}
             <div class="cart-drawer__collection">
-              {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %}
+              {% render 'card-collection', card_collection: settings.cart_drawer_collection, columns: 1 %} 
             </div>
           {%- endif -%}
         </div>
@@ -349,6 +353,23 @@
           </div>
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
+         {%- if settings.cart_drawer_product != blank -%}
+            <div class="cart-drawer__collection product_drawer">
+              {% if settings.product_headline %}
+                <p class="product-headline">{{settings.product_headline}}</p>
+              {% endif %}
+              {% render 'card-product', card_product: settings.cart_drawer_product, columns: 1 %}
+              {% for item in cart.items %}
+                {% if item.product_id == settings.cart_drawer_product.id %}
+                     {% assign showAddtoCart = false %}
+                     {% break %}
+                {% endif %}
+              {% endfor %}
+              {% if showAddtoCart %}
+                {%- render 'buy-buttons', block: block, product: cart_product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%} 
+              {% endif %}
+            </div>
+          {%- endif -%}
       </cart-drawer-items>
       <div class="drawer__footer">
         {%- if settings.show_cart_note -%}
